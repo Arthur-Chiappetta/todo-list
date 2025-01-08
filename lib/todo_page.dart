@@ -29,7 +29,7 @@ class _ToDoPageState extends State<ToDoPage> {
         itemBuilder: (context, index) {
           final todo = toDoList[index];
           return Card(
-            child: ListTile(leading: Text('${index + 1}'), title: Text(todo)),
+            child: ListTile(leading: Text('${index + 1}'), title: Text(todo), onTap: () => deleteTask(context, index),),
           );
         },
       ),
@@ -51,5 +51,37 @@ class _ToDoPageState extends State<ToDoPage> {
         toDoList.add(result);
       });
     }
+  }
+
+void deleteTask(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Task'),
+          content: Text('Do you want to delete this task?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o diálogo
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  toDoList.removeAt(index); // Remove o item da lista
+                });
+                Navigator.of(context).pop(); // Fecha o diálogo
+              },
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
